@@ -1462,6 +1462,22 @@
   }
 
   animateSlide(0);
+
+  // Автомасштаб под любой экран
+  function autoScale() {
+    const baseWidth = 1280;
+    const baseHeight = 720;
+    const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+    const wrapper = document.getElementById('slides');
+    wrapper.style.transform = `scale(${scale})`;
+    wrapper.style.transformOrigin = 'top left';
+    wrapper.style.width = baseWidth + 'px';
+    wrapper.style.height = baseHeight + 'px';
+    document.body.style.width = window.innerWidth + 'px';
+    document.body.style.height = window.innerHeight + 'px';
+  }
+  autoScale();
+  window.addEventListener('resize', autoScale);
 </script>
 </body>
 </html>
