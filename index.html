@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctorhead — HR Стратегия 2025–2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --surface2: #161b2a;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00c8ff;
+    --accent2: #0a6ebd;
+    --accent3: #00ffc8;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --danger: #ff4d6d;
+    --success: #00ffc8;
+    --font: 'Manrope', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .slides-wrapper {
+    width: 100vw; height: 100vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 72px 90px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(60px);
+    transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    overflow: hidden;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+
+  .slide.out {
+    opacity: 0;
+    transform: translateX(-60px);
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,200,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .slide::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,106,189,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .slide-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .slide-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .slide-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-family: var(--mono);
+  }
+
+  .slide-title {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    max-width: 680px;
+  }
+
+  .slide-title span { color: var(--accent); }
+
+  .slide-meta {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .logo-mark {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .slide-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent) 0%, rgba(0,200,255,0.1) 40%, transparent 100%);
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .slide-content {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+    min-height: 0;
+  }
+
+  .nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 100;
+    background: rgba(17,21,32,0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 10px 20px;
+  }
+
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-dot.active {
+    width: 24px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 8px;
+    transition: color 0.2s;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+  }
+
+  .nav-btn:hover { color: var(--text); }
+
+  .nav-counter {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    padding: 0 8px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    margin: 0 4px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .kpi-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    font-family: var(--mono);
+  }
+
+  .kpi-value {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .kpi-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .month-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .month-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .month-name {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .month-val {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .month-val.green { color: var(--accent3); }
+  .month-val.blue { color: var(--accent); }
+  .month-val.yellow { color: #ffd166; }
+
+  .pillar-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .pillar-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.3s;
+  }
+
+  .pillar-item:hover { border-color: rgba(0,200,255,0.2); }
+
+  .pillar-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .pillar-text { font-size: 14px; font-weight: 500; line-height: 1.5; }
+  .pillar-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--mono);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metric-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .metric-row:last-child { border-bottom: none; }
+
+  .metric-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .metric-name { font-size: 13px; font-weight: 500; flex: 1; }
+
+  .metric-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: var(--mono);
+  }
+
+  .badge-green { background: rgba(0,255,200,0.1); color: var(--accent3); border: 1px solid rgba(0,255,200,0.2); }
+  .badge-blue { background: rgba(0,200,255,0.1); color: var(--accent); border: 1px solid rgba(0,200,255,0.2); }
+  .badge-yellow { background: rgba(255,209,102,0.1); color: #ffd166; border: 1px solid rgba(255,209,102,0.2); }
+
+  .funnel-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .funnel-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .funnel-bar-wrap {
+    flex: 1;
+    height: 44px;
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+
+  .funnel-bar {
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    transition: width 1s cubic-bezier(0.22,1,0.36,1);
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    width: 0;
+  }
+
+  .funnel-bar-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  .funnel-meta {
+    width: 44px;
+    text-align: right;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  .funnel-stage {
+    width: 140px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .prog-wrap { margin-bottom: 28px; }
+
+  .prog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+
+  .prog-name { font-size: 15px; font-weight: 600; }
+  .prog-pct { font-size: 28px; font-weight: 800; color: var(--accent); font-family: var(--mono); }
+
+  .prog-track {
+    height: 10px;
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .prog-fill {
+    height: 100%;
+    border-radius: 10px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .prog-fill.c1 { background: linear-gradient(90deg, #0a6ebd, var(--accent)); }
+  .prog-fill.c2 { background: linear-gradient(90deg, #006644, var(--accent3)); }
+  .prog-fill.c3 { background: linear-gradient(90deg, #7b2d8b, #e040fb); }
+
+  .chart-container {
+    position: relative;
+    width: 100%; height: 100%;
+  }
+
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    width: 100%;
+  }
+
+  .strategy-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .strategy-card:hover {
+    border-color: rgba(0,200,255,0.25);
+    transform: translateY(-2px);
+  }
+
+  .strategy-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .strategy-card:nth-child(1)::after { background: var(--accent); }
+  .strategy-card:nth-child(2)::after { background: var(--accent3); }
+  .strategy-card:nth-child(3)::after { background: #ffd166; }
+  .strategy-card:nth-child(4)::after { background: #e040fb; }
+  .strategy-card:nth-child(5)::after { background: #ff7043; }
+
+  .strategy-num { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 12px; }
+  .strategy-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+  .strategy-head { font-size: 15px; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+
+  .strategy-items { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+  .strategy-items li {
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 12px;
+    position: relative;
+  }
+
+  .strategy-items li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .check-mark {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: rgba(0,255,200,0.1);
+    border: 1px solid rgba(0,255,200,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 10px;
+    color: var(--accent3);
+  }
+
+  .compare-wrap { display: flex; flex-direction: column; gap: 14px; }
+
+  .compare-row {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .compare-label { font-size: 12px; font-weight: 600; color: var(--muted); width: 160px; flex-shrink: 0; }
+
+  .compare-before {
+    flex: 1;
+    font-size: 13px;
+    color: #ff7b7b;
+    padding: 6px 12px;
+    background: rgba(255,77,109,0.06);
+    border-radius: 8px;
+    border: 1px solid rgba(255,77,109,0.12);
+  }
+
+  .compare-arrow { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+
+  .compare-after {
+    flex: 1;
+    font-size: 13px;
+    color: var(--accent3);
+    padding: 6px 12px;
+    background: rgba(0,255,200,0.06);
+    border-radius: 8px;
+    border: 1px solid rgba(0,255,200,0.12);
+  }
+
+  .anim-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .anim-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #slide1 .slide-content { align-items: stretch; }
+
+  .s1-left { flex: 0 0 300px; display: flex; flex-direction: column; gap: 16px; }
+  .s1-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+
+  .big-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 36px 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .big-kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent3), transparent);
+  }
+
+  .big-kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 10px;
+  }
+
+  .big-kpi-val {
+    font-size: 96px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent3) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  .big-kpi-desc { font-size: 14px; color: var(--muted); font-weight: 500; }
+
+  .s2-left { flex: 0 0 300px; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  .s2-right { flex: 1; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+
+  .s3-left { flex: 1; display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: hidden; }
+  .s3-right { flex: 0 0 340px; display: flex; flex-direction: column; gap: 14px; }
+
+  .s4-left { flex: 0 0 360px; display: flex; flex-direction: column; gap: 14px; }
+  .s4-right { flex: 1; display: flex; flex-direction: column; }
+
+  .s5-left { flex: 0 0 340px; display: flex; flex-direction: column; gap: 12px; }
+  .s5-right { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+
+  #slide6 .slide-content { flex-direction: column; gap: 20px; }
+
+  .s6-top { display: flex; gap: 24px; flex: 0 0 auto; }
+
+  .s6-goal {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+
+  .s6-goal:hover { border-color: rgba(0,200,255,0.3); }
+
+  .s6-goal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .s6-goal:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .s6-goal:nth-child(2)::before { background: linear-gradient(90deg, var(--accent3), transparent); }
+  .s6-goal:nth-child(3)::before { background: linear-gradient(90deg, #ffd166, transparent); }
+  .s6-goal:nth-child(4)::before { background: linear-gradient(90deg, #e040fb, transparent); }
+
+  .s6-goal-icon { font-size: 28px; flex-shrink: 0; }
+  .s6-goal-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .s6-goal-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .s6-bottom { display: flex; gap: 16px; flex: 1; }
+
+  .s6-mech {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 24px;
+  }
+
+  .s6-mech-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .s6-mech-items { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .s6-mech-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .s6-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="slides-wrapper" id="slides">
+
+  <!-- TITLE SLIDE -->
+  <div class="slide active" id="slide-title">
+    <div class="slide-bg-grid"></div>
+    <div style="position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, transparent, var(--accent), var(--accent3), transparent); opacity:0.8;"></div>
+    <div style="position:absolute; bottom:0; left:0; right:0; height:1px; background:linear-gradient(90deg, transparent, rgba(0,200,255,0.3), transparent);"></div>
+
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0; padding:60px;">
+      <div class="anim-in" style="font-family:var(--mono); font-size:13px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); margin-bottom:32px;">doctorhead.ru</div>
+      <div class="anim-in" style="transition-delay:0.1s; text-align:center; margin-bottom:16px;">
+        <div style="font-size:clamp(48px, 6vw, 80px); font-weight:900; letter-spacing:-0.03em; line-height:1; color:var(--text);">DOCTORHEAD</div>
+      </div>
+      <div class="anim-in" style="transition-delay:0.2s; text-align:center; margin-bottom:48px;">
+        <div style="font-size:clamp(20px, 3vw, 36px); font-weight:300; letter-spacing:0.15em; text-transform:uppercase; background:linear-gradient(90deg, var(--accent), var(--accent3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">HR Review 2025 – 2026</div>
+      </div>
+      <div class="anim-in" style="transition-delay:0.3s; width:120px; height:1px; background:linear-gradient(90deg, transparent, var(--accent), transparent); margin-bottom:40px;"></div>
+      <div class="anim-in" style="transition-delay:0.4s; display:flex; gap:16px; flex-wrap:wrap; justify-content:center;">
+        <div style="padding:8px 20px; border:1px solid rgba(0,200,255,0.2); border-radius:100px; font-size:12px; font-family:var(--mono); color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; background:rgba(0,200,255,0.04);">Итоги 2025</div>
+        <div style="padding:8px 20px; border:1px solid rgba(0,255,200,0.2); border-radius:100px; font-size:12px; font-family:var(--mono); color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; background:rgba(0,255,200,0.04);">Стратегия 2026</div>
+        <div style="padding:8px 20px; border:1px solid rgba(255,255,255,0.08); border-radius:100px; font-size:12px; font-family:var(--mono); color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; background:rgba(255,255,255,0.02);">HR-функция</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 0 -->
+  <div class="slide" id="slide0">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">02 / 07 · Контекст</div>
+        <div class="slide-title">HR как <span>стратегический партнёр</span> бизнеса</div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+        <div>Стратегия 2026</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content">
+      <div style="flex:0 0 300px; display:flex; flex-direction:column; gap:14px; min-height:0;">
+        <div class="kpi-card anim-in" style="flex-shrink:0;">
+          <div class="kpi-label">Цель</div>
+          <div style="font-size:22px; font-weight:800; color:var(--accent3); letter-spacing:-0.01em; line-height:1.3; margin-top:6px;">Выполнение планов продаж</div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.05s; flex:1;">
+          <div class="kpi-label">Фокус HR-функции</div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.15); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;">🔍</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Аудит и построение HR-функции</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.15); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;">🗺️</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Формирование HR-стратегии</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.15); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;">🏗️</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Организационный дизайн</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border-radius:10px; border:1px solid var(--border);">
+              <div style="width:32px; height:32px; border-radius:8px; background:rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.15); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0;">🤝</div>
+              <div style="font-size:13px; font-weight:600; color:var(--text);">Корпоративная культура</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:12px; min-height:0;">
+        <div class="section-label anim-in" style="transition-delay:0.1s;">Что сделано</div>
+        <div style="display:flex; flex-direction:column; gap:10px; flex:1;">
+          <div class="anim-in" style="transition-delay:0.15s; display:flex; gap:16px; padding:18px 20px; background:var(--surface); border:1px solid var(--border); border-radius:14px; align-items:flex-start; flex:1; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:var(--accent); border-radius:2px;"></div>
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(0,200,255,0.08); border:1px solid rgba(0,200,255,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; margin-left:4px;">📋</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:5px;">Аудит и приоритеты</div>
+              <div style="font-size:12px; color:var(--muted); line-height:1.6;">Проведён аудит; первые 3 месяца — приоритет на закрытие вакансий, адаптацию новичков и обучение персонала. Внедрена прозрачная мотивация.</div>
+            </div>
+          </div>
+          <div class="anim-in" style="transition-delay:0.2s; display:flex; gap:16px; padding:18px 20px; background:var(--surface); border:1px solid var(--border); border-radius:14px; align-items:flex-start; flex:1; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:var(--accent3); border-radius:2px;"></div>
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(0,255,200,0.08); border:1px solid rgba(0,255,200,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; margin-left:4px;">🎯</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:5px;">Карта ССП</div>
+              <div style="font-size:12px; color:var(--muted); line-height:1.6;">Разработана карта ССП HR-функции в соответствии со стратегией компании, направленная на формирование сильной и эффективной команды.</div>
+            </div>
+          </div>
+          <div class="anim-in" style="transition-delay:0.25s; display:flex; gap:16px; padding:18px 20px; background:var(--surface); border:1px solid var(--border); border-radius:14px; align-items:flex-start; flex:1; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:#ffd166; border-radius:2px;"></div>
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(255,209,102,0.08); border:1px solid rgba(255,209,102,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; margin-left:4px;">🏗️</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:5px;">Оргструктура</div>
+              <div style="font-size:12px; color:var(--muted); line-height:1.6;">Подготовлены варианты организационной структуры для утверждения максимально эффективной системы управления.</div>
+            </div>
+          </div>
+          <div class="anim-in" style="transition-delay:0.3s; display:flex; gap:16px; padding:18px 20px; background:var(--surface); border:1px solid var(--border); border-radius:14px; align-items:flex-start; flex:1; position:relative; overflow:hidden;">
+            <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:#e040fb; border-radius:2px;"></div>
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(224,64,251,0.08); border:1px solid rgba(224,64,251,0.2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; margin-left:4px;">🤝</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:5px;">Командообразование</div>
+              <div style="font-size:12px; color:var(--muted); line-height:1.6;">Проведено командообразующее мероприятие: объединение руководителей в единое информационное поле, повышение вовлечённости команды.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide" id="slide1">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">03 / 07 · HR-стратегия</div>
+        <div class="slide-title">HR-функция как <span>фактор роста продаж</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+        <div>Стратегия 2026</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content">
+      <div class="s1-right">
+        <div class="kpi-card anim-in" style="transition-delay:0.15s; flex:1; display:flex; flex-direction:column;">
+          <div class="kpi-label">Что выполнено</div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px; flex:1;">
+            <div style="flex:1; display:flex; align-items:center; gap:16px; padding:14px 18px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); border-left:3px solid var(--accent);">
+              <span class="check-mark" style="flex-shrink:0;">✓</span>
+              <div style="font-size:14px; font-weight:600; color:var(--text); line-height:1.4;">Изменён процесс подбора: совместные интервью, демонстрация рабочего места, стажировка менеджеров ИМ в рознице, обновление Wiki</div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; gap:16px; padding:14px 18px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); border-left:3px solid var(--accent3);">
+              <span class="check-mark" style="flex-shrink:0;">✓</span>
+              <div style="font-size:14px; font-weight:600; color:var(--text); line-height:1.4;">Единый формат калькуляторов расчёта зарплаты — исключение ошибок и человеческого фактора</div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; gap:16px; padding:14px 18px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); border-left:3px solid #ffd166;">
+              <span class="check-mark" style="flex-shrink:0;">✓</span>
+              <div style="font-size:14px; font-weight:600; color:var(--text); line-height:1.4;">Сквозной показатель конверсии для всех сотрудников розницы и руководителя маркетинга</div>
+            </div>
+            <div style="flex:1; display:flex; align-items:center; gap:16px; padding:14px 18px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); border-left:3px solid #e040fb;">
+              <span class="check-mark" style="flex-shrink:0;">✓</span>
+              <div style="font-size:14px; font-weight:600; color:var(--text); line-height:1.4;">Прозрачная мотивация склада: еженедельный трекинг по отгрузке, сборке и приёмке товара</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="s1-left">
+        <div class="big-kpi anim-in" style="flex:0 0 auto; padding:20px 28px;">
+          <div class="big-kpi-label">Конверсия декабрь 2025</div>
+          <div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;">
+            <div class="big-kpi-val" id="conv-counter" style="font-size:64px;">0</div>
+            <div style="display:flex; flex-direction:column; gap:4px;">
+              <span style="font-size:16px; font-weight:700; color:var(--accent3); background:rgba(0,255,200,0.08); border:1px solid rgba(0,255,200,0.2); border-radius:8px; padding:3px 10px; white-space:nowrap;">+2,5 п.п.</span>
+            </div>
+          </div>
+          <div style="margin-top:12px; padding:10px 14px; background:rgba(0,255,200,0.06); border:1px solid rgba(0,255,200,0.15); border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:var(--muted); font-family:var(--mono); text-transform:uppercase; letter-spacing:0.1em;">Декабрь — лучший месяц</span>
+            <span style="font-size:20px; font-weight:800; color:var(--accent3);">104%</span>
+          </div>
+        </div>
+        <div class="section-label anim-in" style="transition-delay:0.05s;">Выполнение плана</div>
+        <div class="month-grid anim-in" style="transition-delay:0.1s; grid-template-columns:1fr 1fr;">
+          <div class="month-item"><span class="month-name">Октябрь</span><span class="month-val blue" data-count="101">0</span></div>
+          <div class="month-item"><span class="month-name">Ноябрь</span><span class="month-val blue" data-count="100">0</span></div>
+          <div class="month-item"><span class="month-name">Декабрь</span><span class="month-val green" data-count="104">0</span></div>
+          <div class="month-item"><span class="month-name">Январь</span><span class="month-val yellow" data-count="95">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide" id="slide2">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">04 / 07 · Подбор команды</div>
+        <div class="slide-title">Системный подбор <span>ключевых ролей</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content">
+      <div class="s2-left">
+        <div class="section-label anim-in">Массовый подбор — результаты</div>
+        <div class="kpi-card anim-in" style="transition-delay:0.05s; padding:14px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <div class="kpi-label">Менеджеры ИМ до 01.12</div>
+          <div class="kpi-value" style="font-size:40px;" data-count="100">0</div>
+          <div class="kpi-sub">% закрытия вакансий</div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.1s; padding:14px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <div class="kpi-label">Сезонный склад до 10.12</div>
+          <div class="kpi-value" style="font-size:40px;" data-count="95">0</div>
+          <div class="kpi-sub">% укомплектованности</div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.15s; padding:14px 20px; flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <div class="kpi-label">Ключевые руководители</div>
+          <div class="kpi-value" style="font-size:40px;" data-count="100">0</div>
+          <div class="kpi-sub">% закрытия позиций</div>
+        </div>
+      </div>
+      <div class="s2-right">
+        <div class="section-label anim-in" style="transition-delay:0.2s">Воронка подбора CEO</div>
+        <div class="funnel-wrap anim-in" style="transition-delay:0.25s; margin-top:0; flex:1;">
+          <div class="funnel-step">
+            <div class="funnel-stage">Получено резюме</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" data-width="100"><span class="funnel-bar-label">Входящий поток</span></div></div>
+            <div class="funnel-meta">532</div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-stage">Онлайн-интервью</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" data-width="55"><span class="funnel-bar-label">Прошли отбор</span></div></div>
+            <div class="funnel-meta">48</div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-stage">Личные интервью</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" data-width="35"><span class="funnel-bar-label">Финалисты</span></div></div>
+            <div class="funnel-meta">14</div>
+          </div>
+          <div class="funnel-step">
+            <div class="funnel-stage">Встреча с собственниками</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" data-width="12.5" style="background:linear-gradient(90deg, var(--accent3), #00a885);"><span class="funnel-bar-label">Топ-кандидаты</span></div></div>
+            <div class="funnel-meta" style="color:var(--accent3)">5</div>
+          </div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.4s; flex-shrink:0;">
+          <div class="kpi-label">Конверсия воронки</div>
+          <div style="display:flex; gap:20px; align-items:center; margin-top:8px;">
+            <div>
+              <div style="font-size:11px; color:var(--muted); margin-bottom:4px; font-family:var(--mono); text-transform:uppercase; letter-spacing:0.1em;">Резюме → Собственники</div>
+              <div style="font-size:36px; font-weight:800; color:var(--accent); letter-spacing:-0.02em;">0.9%</div>
+            </div>
+            <div style="width:1px; height:48px; background:var(--border);"></div>
+            <div>
+              <div style="font-size:11px; color:var(--muted); margin-bottom:4px; font-family:var(--mono); text-transform:uppercase; letter-spacing:0.1em;">Онлайн → Личные</div>
+              <div style="font-size:36px; font-weight:800; color:var(--accent3); letter-spacing:-0.02em;">29.2%</div>
+            </div>
+            <div style="width:1px; height:48px; background:var(--border);"></div>
+            <div>
+              <div style="font-size:11px; color:var(--muted); margin-bottom:4px; font-family:var(--mono); text-transform:uppercase; letter-spacing:0.1em;">Резюме → Интервью</div>
+              <div style="font-size:36px; font-weight:800; color:#ffd166; letter-spacing:-0.02em;">9%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide" id="slide3">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">05 / 07 · Текучесть и адаптация</div>
+        <div class="slide-title">Снижение текучести через <span>изменение процессов</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content">
+      <div class="s3-left">
+        <div class="section-label anim-in">Ключевые метрики</div>
+        <div class="kpi-card anim-in" style="transition-delay:0.05s; flex:1; min-height:0;">
+          <div class="kpi-label">Сравнение с рынком и динамика</div>
+          <div class="chart-container" style="height:160px; margin-top:8px;">
+            <canvas id="turnoverChart"></canvas>
+          </div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.15s;">
+          <div class="kpi-label">Текучесть на испытательном сроке</div>
+          <div style="display:flex; align-items:baseline; gap:20px; margin-top:8px;">
+            <div>
+              <div style="font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:0.1em; margin-bottom:4px;">ФАКТ 2025</div>
+              <div style="font-size:48px; font-weight:800; color:var(--danger); letter-spacing:-0.03em;">32%</div>
+            </div>
+            <div style="font-size:24px; color:var(--muted);">→</div>
+            <div>
+              <div style="font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:0.1em; margin-bottom:4px;">ЦЕЛЬ 2026</div>
+              <div style="font-size:48px; font-weight:800; color:var(--accent3); letter-spacing:-0.03em;">≤25%</div>
+            </div>
+            <div style="font-size:11px; color:var(--muted); padding:6px 12px; background:rgba(0,255,200,0.06); border-radius:8px; border:1px solid rgba(0,255,200,0.12); align-self:center;">
+              Экономия<br><strong style="font-size:18px; color:var(--accent3);">−7 п.п.</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="s3-right">
+        <div class="section-label anim-in" style="transition-delay:0.2s;">Что внедрено</div>
+        <div class="pillar-list">
+          <div class="pillar-item anim-in" style="transition-delay:0.25s">
+            <div class="pillar-icon">🤝</div>
+            <div><div class="pillar-text">Совместные интервью</div><div class="pillar-sub">HR + непосредственный руководитель</div></div>
+          </div>
+          <div class="pillar-item anim-in" style="transition-delay:0.3s">
+            <div class="pillar-icon">🏪</div>
+            <div><div class="pillar-text">Демонстрация рабочего места</div><div class="pillar-sub">До выхода сотрудника на работу</div></div>
+          </div>
+          <div class="pillar-item anim-in" style="transition-delay:0.35s">
+            <div class="pillar-icon">🔄</div>
+            <div><div class="pillar-text">Стажировка ИМ в рознице</div><div class="pillar-sub">Кросс-форматное погружение</div></div>
+          </div>
+          <div class="pillar-item anim-in" style="transition-delay:0.4s">
+            <div class="pillar-icon">📚</div>
+            <div><div class="pillar-text">Обновление базы знаний Wiki</div><div class="pillar-sub">Актуализация онбординг-материалов</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide" id="slide4">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">06 / 07 · Обучение</div>
+        <div class="slide-title">Модульная система <span>обучения</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content">
+      <div class="s5-left">
+        <div class="section-label anim-in">Охват обучения</div>
+        <div class="prog-wrap anim-in" style="transition-delay:0.05s">
+          <div class="prog-header"><span class="prog-name">Сервис и продажи</span><span class="prog-pct" data-count="97">0%</span></div>
+          <div class="prog-track"><div class="prog-fill c1" data-width="97"></div></div>
+          <div class="prog-sub">Очный формат · Обязательный модуль</div>
+        </div>
+        <div class="prog-wrap anim-in" style="transition-delay:0.1s">
+          <div class="prog-header"><span class="prog-name">Обучение 1С</span><span class="prog-pct" data-count="80">0%</span></div>
+          <div class="prog-track"><div class="prog-fill c2" data-width="80"></div></div>
+          <div class="prog-sub">Операционные процессы · В процессе</div>
+        </div>
+        <div class="prog-wrap anim-in" style="transition-delay:0.15s">
+          <div class="prog-header"><span class="prog-name">Продукт / бренды</span><span class="prog-pct" data-count="85">0%</span></div>
+          <div class="prog-track"><div class="prog-fill c3" data-width="85"></div></div>
+          <div class="prog-sub">Бренд-обучений проведено · 100% план</div>
+        </div>
+        <div class="kpi-card anim-in" style="transition-delay:0.2s; margin-top:4px; overflow:visible;">
+          <div class="kpi-label">Акцент на очный формат</div>
+          <div style="display:flex; align-items:center; gap:20px; margin-top:10px;">
+            <svg width="72" height="72" viewBox="0 0 72 72" style="flex-shrink:0; overflow:visible; transform:rotate(-90deg);">
+              <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="9"/>
+              <circle cx="36" cy="36" r="30" fill="none" stroke="#00c8ff" stroke-width="9" stroke-dasharray="188.5" stroke-dashoffset="18.85" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <div style="font-size:32px; font-weight:800; color:var(--accent); letter-spacing:-0.02em; line-height:1;">90%</div>
+              <div style="font-size:12px; color:var(--muted); margin-top:4px;">Очные программы</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="s5-right">
+        <div class="section-label anim-in" style="transition-delay:0.25s;">Структура учебных модулей</div>
+        <div class="kpi-card anim-in" style="transition-delay:0.3s; flex:0 0 auto; display:flex; flex-direction:column;">
+          <div class="kpi-label">Распределение по направлениям</div>
+          <div style="display:flex; align-items:center; justify-content:center; gap:30px; padding:10px 0;">
+            <div style="position:relative; width:140px; height:140px; flex-shrink:0;">
+              <canvas id="trainChart" style="width:140px!important; height:140px!important;"></canvas>
+              <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none;">
+                <div style="font-size:10px; color:var(--muted); font-family:var(--mono); letter-spacing:0.1em; text-transform:uppercase;">Модулей</div>
+                <div style="font-size:28px; font-weight:800; color:var(--text); letter-spacing:-0.03em;">3</div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; align-items:center; gap:14px;"><div style="width:12px; height:12px; border-radius:3px; background:rgba(0,200,255,0.85); flex-shrink:0;"></div><div><div style="font-size:14px; font-weight:600; color:var(--text);">Сервис и продажи</div><div style="font-size:12px; color:var(--muted); font-family:var(--mono);">43%</div></div></div>
+              <div style="display:flex; align-items:center; gap:14px;"><div style="width:12px; height:12px; border-radius:3px; background:rgba(224,64,251,0.85); flex-shrink:0;"></div><div><div style="font-size:14px; font-weight:600; color:var(--text);">Продуктовое</div><div style="font-size:12px; color:var(--muted); font-family:var(--mono);">28%</div></div></div>
+              <div style="display:flex; align-items:center; gap:14px;"><div style="width:12px; height:12px; border-radius:3px; background:rgba(0,255,200,0.8); flex-shrink:0;"></div><div><div style="font-size:14px; font-weight:600; color:var(--text);">1С</div><div style="font-size:12px; color:var(--muted); font-family:var(--mono);">28%</div></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;" class="anim-in">
+          <div class="kpi-card" style="padding:16px 20px;">
+            <div class="kpi-label" style="color:var(--accent);">Сервис и продажи</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>Единый стандарт сервиса</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>Анатомия возражений</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>Искусство доп. продаж</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span>Обслуживание нескольких клиентов</div>
+            </div>
+          </div>
+          <div class="kpi-card" style="padding:16px 20px;">
+            <div class="kpi-label" style="color:#e040fb;">Продукт</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Finalaudio</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Аудио/видео ресиверы</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Swiplan</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Saramonic и стабилизаторы Zhiyun</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Phaze audio</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Magsssory</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>SW audio</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:#e040fb;flex-shrink:0;"></span>Kennerton</div>
+            </div>
+          </div>
+          <div class="kpi-card" style="padding:16px 20px;">
+            <div class="kpi-label" style="color:var(--accent3);">1С</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:12px;">
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent3);flex-shrink:0;"></span>Программа лояльности</div>
+              <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); font-weight:500;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent3);flex-shrink:0;"></span>Текущие операции</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide" id="slide5">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header">
+      <div class="slide-header-left">
+        <div class="slide-tag">07 / 07 · Стратегия 2026</div>
+        <div class="slide-title">HR 2026 — фокус на <span>производительность</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>Стратегия 2026</div>
+      </div>
+    </div>
+    <div class="slide-divider"></div>
+    <div class="slide-content" style="flex-direction:column; gap:20px;">
+      <div class="s6-top">
+        <div class="s6-goal anim-in"><div class="s6-goal-icon">📈</div><div><div class="s6-goal-title">Производительность</div><div class="s6-goal-desc">Рост выработки на сотрудника, оптимизация ФОТ</div></div></div>
+        <div class="s6-goal anim-in" style="transition-delay:0.05s"><div class="s6-goal-icon">🎯</div><div><div class="s6-goal-title">Усиление менеджеров</div><div class="s6-goal-desc">Развитие линейного управленческого звена</div></div></div>
+        <div class="s6-goal anim-in" style="transition-delay:0.1s"><div class="s6-goal-icon">🏆</div><div><div class="s6-goal-title">Бренд работодателя</div><div class="s6-goal-desc">Позиционирование как топ-работодатель отрасли</div></div></div>
+        <div class="s6-goal anim-in" style="transition-delay:0.15s"><div class="s6-goal-icon">👥</div><div><div class="s6-goal-title">Усиление команды</div><div class="s6-goal-desc">Ротация, развитие, привлечение сильных людей</div></div></div>
+      </div>
+      <div class="s6-bottom">
+        <div class="s6-mech anim-in" style="transition-delay:0.2s">
+          <div class="s6-mech-title">💰 Компенсации и оплата</div>
+          <ul class="s6-mech-items">
+            <li class="s6-mech-item"><span class="s6-dot"></span>Система оплаты труда</li>
+            <li class="s6-mech-item"><span class="s6-dot"></span>Система компенсаций и льгот</li>
+            <li class="s6-mech-item"><span class="s6-dot"></span>Оптимизация ФОТ</li>
+          </ul>
+        </div>
+        <div class="s6-mech anim-in" style="transition-delay:0.25s">
+          <div class="s6-mech-title">🔄 Операционная эффективность</div>
+          <ul class="s6-mech-items">
+            <li class="s6-mech-item"><span class="s6-dot" style="background:var(--accent3)"></span>Мультифункциональность розницы</li>
+            <li class="s6-mech-item"><span class="s6-dot" style="background:var(--accent3)"></span>Ротация и развитие</li>
+            <li class="s6-mech-item"><span class="s6-dot" style="background:var(--accent3)"></span>Обучение SoftSkills</li>
+          </ul>
+        </div>
+        <div class="s6-mech anim-in" style="transition-delay:0.3s">
+          <div class="s6-mech-title" style="color:#ffd166">📊 Аналитика и прозрачность</div>
+          <ul class="s6-mech-items">
+            <li class="s6-mech-item"><span class="s6-dot" style="background:#ffd166"></span>Linked HR с ССП</li>
+            <li class="s6-mech-item"><span class="s6-dot" style="background:#ffd166"></span>Опрос eNPS</li>
+          </ul>
+        </div>
+        <div class="s6-mech anim-in" style="transition-delay:0.35s">
+          <div class="s6-mech-title" style="color:#e040fb">🚀 Развитие и бренд</div>
+          <ul class="s6-mech-items">
+            <li class="s6-mech-item"><span class="s6-dot" style="background:#e040fb"></span>Программа кадрового резерва</li>
+            <li class="s6-mech-item"><span class="s6-dot" style="background:#e040fb"></span>Подбор управленцев</li>
+            <li class="s6-mech-item"><span class="s6-dot" style="background:#e040fb"></span>Усиление онбординга</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 — Операционные задачи -->
+  <div class="slide" id="slide6" style="padding:28px 48px 72px;">
+    <div class="slide-bg-grid"></div>
+    <div class="slide-header" style="margin-bottom:20px;">
+      <div class="slide-header-left">
+        <div class="slide-tag">08 / 08 · Операционные задачи</div>
+        <div class="slide-title" style="font-size:26px;">Операционные задачи — <span>сделано и в плане</span></div>
+      </div>
+      <div class="slide-meta">
+        <div class="logo-mark">DOCTORHEAD</div>
+        <div>HR Review 2025</div>
+        <div>Стратегия 2026</div>
+      </div>
+    </div>
+    <div class="slide-divider" style="margin-bottom:16px;"></div>
+
+    <div class="slide-content" style="gap:20px;">
+
+      <!-- LEFT: Выполнено -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:8px; min-height:0; overflow:hidden;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent3); font-family:var(--mono); padding-bottom:6px; border-bottom:1px solid var(--border); flex-shrink:0;">✓ Выполнено</div>
+        <div style="display:flex; flex-direction:column; gap:5px; flex:1; overflow:hidden;">
+
+          <div class="anim-in" style="display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">01</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Ежедневный контроль работы склада, трекинг ключевых показателей отгрузок, приёмки, оформления возвратов</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.04s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">02</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Быстрые решения: перевод склада на режим 24/7, набор сезонных сотрудников, диверсификация графиков (09:00–21:00, 10:00–22:00)</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.08s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">03</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Розница: назначение тимлидов на АТ</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.12s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">04</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Решение о делении заказов ИМ и АТ — минимизация конфликта интересов</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.16s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">05</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Назначение координаторов зала АТ — ускорение сборки заказов ИМ и перемещение на ЦС</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.2s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">06</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Прослушивание звонков и просмотр чата Живо: обратная связь по weak points, повышение качества диалогов с клиентами</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.24s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">07</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Работа в полях до 40% времени: велком-зона, навигация клиентов, контроль качества, ХЛЗ — раз в 2 недели, Литейный — 1 раз, удалённая поддержка, склад: коммуникация с персоналом, сборка заказов</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.28s; display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">08</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Анализ ситуации по претензиям клиентов</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: План февраль–март -->
+      <div style="flex:0 0 340px; display:flex; flex-direction:column; gap:8px; min-height:0;">
+        <div style="font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); font-family:var(--mono); padding-bottom:6px; border-bottom:1px solid var(--border); flex-shrink:0;">📅 План февраль — март</div>
+        <div style="display:flex; flex-direction:column; gap:5px; flex:1;">
+
+          <div class="anim-in" style="transition-delay:0.1s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">01</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Пересмотр системы оплаты труда складского персонала для повышения скорости сборки заказов</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.14s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">02</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Оптимизация численности неторгового персонала в магазинах: АТ, ЛТ</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.18s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">03</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Оценка эффективности продаж ИМ: аналитика по отменённым заказам, % невыкупленных корзин, % невыкупленных заказов самовывозом</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.22s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">04</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Аттестация продавцов и менеджеров</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.26s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">05</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Внедрение NPS</div>
+          </div>
+
+          <div class="anim-in" style="transition-delay:0.3s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
+            <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">06</div>
+            <div style="font-size:11px; color:var(--text); font-weight:500; line-height:1.4;">Аудит 1С</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button class="nav-btn" id="prevBtn">‹</button>
+  <div id="navDots">
+    <div class="nav-dot active" data-idx="0"></div>
+    <div class="nav-dot" data-idx="1"></div>
+    <div class="nav-dot" data-idx="2"></div>
+    <div class="nav-dot" data-idx="3"></div>
+    <div class="nav-dot" data-idx="4"></div>
+    <div class="nav-dot" data-idx="5"></div>
+    <div class="nav-dot" data-idx="6"></div>
+    <div class="nav-dot" data-idx="7"></div>
+  </div>
+  <div class="nav-counter" id="navCounter">01 / 08</div>
+  <button class="nav-btn" id="nextBtn">›</button>
+</div>
+
+<button id="fullscreenBtn" onclick="toggleFullscreen()" title="Развернуть на весь экран">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 3 21 3 21 9"></polyline>
+    <polyline points="9 21 3 21 3 15"></polyline>
+    <line x1="21" y1="3" x2="14" y2="10"></line>
+    <line x1="3" y1="21" x2="10" y2="14"></line>
+  </svg>
+</button>
+
+<style>
+  #fullscreenBtn {
+    position: fixed; top: 20px; right: 20px; z-index: 1000;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: #6b7a99; width: 40px; height: 40px; border-radius: 10px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  #fullscreenBtn:hover { background: rgba(0,200,255,0.1); border-color: rgba(0,200,255,0.3); color: #00c8ff; }
+</style>
+
+<script>
+  function toggleFullscreen() {
+    const btn = document.getElementById('fullscreenBtn');
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline><line x1="10" y1="14" x2="3" y2="21"></line><line x1="21" y1="3" x2="14" y2="10"></line></svg>`;
+    } else {
+      document.exitFullscreen();
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>`;
+    }
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    const btn = document.getElementById('fullscreenBtn');
+    if (!document.fullscreenElement) {
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>`;
+    }
+  });
+
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+  const counter = document.getElementById('navCounter');
+  let current = 0;
+  let transitioning = false;
+  let chartsInitialized = new Set();
+
+  function goTo(idx) {
+    if (idx === current || transitioning) return;
+    transitioning = true;
+    const prev = current;
+    current = idx;
+    slides[prev].classList.add('out');
+    slides[prev].classList.remove('active');
+    setTimeout(() => { slides[prev].classList.remove('out'); transitioning = false; }, 650);
+    slides[current].classList.add('active');
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+    counter.textContent = String(current + 1).padStart(2, '0') + ' / 08';
+    animateSlide(current);
+  }
+
+  document.getElementById('nextBtn').onclick = () => goTo(Math.min(current + 1, slides.length - 1));
+  document.getElementById('prevBtn').onclick = () => goTo(Math.max(current - 1, 0));
+  dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.idx)));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') goTo(Math.min(current + 1, slides.length - 1));
+    if (e.key === 'ArrowLeft') goTo(Math.max(current - 1, 0));
+  });
+
+  function animateSlide(idx) {
+    const slide = slides[idx];
+    setTimeout(() => { slide.querySelectorAll('.anim-in').forEach(el => el.classList.add('visible')); }, 100);
+    slide.querySelectorAll('[data-count]').forEach(el => {
+      const target = +el.getAttribute('data-count');
+      animateCounter(el, target, el.classList.contains('prog-pct') ? '%' : '');
+    });
+    if (idx === 2) { const el = document.getElementById('conv-counter'); if (el) animateCounter(el, 104, '%'); }
+    setTimeout(() => { slide.querySelectorAll('.prog-fill[data-width]').forEach(el => { el.style.width = el.getAttribute('data-width') + '%'; }); }, 300);
+    setTimeout(() => { slide.querySelectorAll('.funnel-bar[data-width]').forEach(el => { el.style.width = el.getAttribute('data-width') + '%'; }); }, 300);
+    if (!chartsInitialized.has(idx)) { chartsInitialized.add(idx); setTimeout(() => initChart(idx), 300); }
+  }
+
+  function animateCounter(el, target, suffix = '') {
+    let start = 0;
+    const duration = 1200;
+    const startTime = performance.now();
+    function tick(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const val = Math.round(start + (target - start) * eased);
+      el.textContent = val + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const gridColor = 'rgba(255,255,255,0.05)';
+  const tickColor = '#6b7a99';
+
+  function initChart(idx) {
+    if (idx === 4) initTurnoverChart();
+    if (idx === 5) initTrainChart();
+  }
+
+  function initTurnoverChart() {
+    const ctx = document.getElementById('turnoverChart');
+    if (!ctx || ctx._chartInstance) return;
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Бенчмарк рынка', 'Doctorhead 2025', 'Цель 2026'],
+        datasets: [{ data: [57.5, 46, 40], backgroundColor: ['rgba(255,77,109,0.4)', 'rgba(0,200,255,0.6)', 'rgba(0,255,200,0.7)'], borderRadius: 10, borderSkipped: false }]
+      },
+      options: {
+        maintainAspectRatio: false, animation: { duration: 1000 },
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: gridColor }, ticks: { color: tickColor, font: { family: 'DM Mono', size: 11 }, callback: v => v + '%' }, max: 70 },
+          y: { grid: { display: false }, ticks: { color: tickColor, font: { family: 'Manrope', size: 11 } } }
+        },
+        indexAxis: 'y',
+      }
+    });
+    ctx._chartInstance = chart;
+  }
+
+  function initTrainChart() {
+    const ctx = document.getElementById('trainChart');
+    if (!ctx || ctx._chartInstance) return;
+    const chart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Сервис и продажи', 'Продуктовое', '1С'],
+        datasets: [{ data: [43.3, 28.3, 28.3], backgroundColor: ['rgba(0,200,255,0.85)', 'rgba(224,64,251,0.85)', 'rgba(0,255,200,0.8)'], borderColor: '#0a0d14', borderWidth: 4, hoverOffset: 8 }]
+      },
+      options: { maintainAspectRatio: false, animation: { duration: 1000 }, plugins: { legend: { display: false }, tooltip: { enabled: true } }, cutout: '68%' }
+    });
+    ctx._chartInstance = chart;
+  }
+
+  animateSlide(0);
+</script>
+</body>
+</html>
