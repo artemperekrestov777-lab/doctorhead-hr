@@ -1473,8 +1473,12 @@
     wrapper.style.transformOrigin = 'top left';
     wrapper.style.width = baseWidth + 'px';
     wrapper.style.height = baseHeight + 'px';
-    document.body.style.width = window.innerWidth + 'px';
-    document.body.style.height = window.innerHeight + 'px';
+    // Центрируем если экран шире
+    const offsetX = Math.max(0, (window.innerWidth - baseWidth * scale) / 2);
+    const offsetY = Math.max(0, (window.innerHeight - baseHeight * scale) / 2);
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = offsetX + 'px';
+    wrapper.style.top = offsetY + 'px';
   }
   autoScale();
   window.addEventListener('resize', autoScale);
