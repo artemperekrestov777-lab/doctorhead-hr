@@ -46,7 +46,7 @@
     inset: 0;
     display: flex;
     flex-direction: column;
-    padding: 48px 72px 90px;
+    padding: 36px 60px 70px;
     opacity: 0;
     pointer-events: none;
     transform: translateX(60px);
@@ -97,7 +97,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 40px;
+    margin-bottom: 28px;
     position: relative;
     z-index: 2;
   }
@@ -142,7 +142,7 @@
   .slide-divider {
     height: 1px;
     background: linear-gradient(90deg, var(--accent) 0%, rgba(0,200,255,0.1) 40%, transparent 100%);
-    margin-bottom: 32px;
+    margin-bottom: 20px;
     position: relative;
     z-index: 2;
   }
@@ -1196,7 +1196,7 @@
   </div>
 
   <!-- SLIDE 6 — Операционные задачи -->
-  <div class="slide" id="slide6" style="padding:28px 48px 72px;">
+  <div class="slide" id="slide6" style="padding:28px 48px 60px;">
     <div class="slide-bg-grid"></div>
     <div class="slide-header" style="margin-bottom:20px;">
       <div class="slide-header-left">
@@ -1211,12 +1211,12 @@
     </div>
     <div class="slide-divider" style="margin-bottom:16px;"></div>
 
-    <div class="slide-content" style="gap:20px;">
+    <div class="slide-content" style="gap:20px; flex-direction:row; align-items:stretch;">
 
       <!-- LEFT: Выполнено -->
-      <div style="flex:1; display:flex; flex-direction:column; gap:8px; min-height:0; overflow:hidden;">
+      <div style="flex:1.2; display:flex; flex-direction:column; gap:8px; min-height:0;">
         <div style="font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent3); font-family:var(--mono); padding-bottom:6px; border-bottom:1px solid var(--border); flex-shrink:0;">✓ Выполнено</div>
-        <div style="display:flex; flex-direction:column; gap:5px; flex:1; overflow:hidden;">
+        <div style="display:flex; flex-direction:column; justify-content:space-between; flex:1;">
 
           <div class="anim-in" style="display:flex; gap:10px; padding:7px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent3); border-radius:8px; align-items:flex-start; flex-shrink:0;">
             <div style="font-family:var(--mono); font-size:10px; color:var(--accent3); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">01</div>
@@ -1262,9 +1262,9 @@
       </div>
 
       <!-- RIGHT: План февраль–март -->
-      <div style="flex:0 0 340px; display:flex; flex-direction:column; gap:8px; min-height:0;">
+      <div style="flex:0.8; display:flex; flex-direction:column; gap:8px; min-height:0;">
         <div style="font-size:10px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--accent); font-family:var(--mono); padding-bottom:6px; border-bottom:1px solid var(--border); flex-shrink:0;">📅 План февраль — март</div>
-        <div style="display:flex; flex-direction:column; gap:5px; flex:1;">
+        <div style="display:flex; flex-direction:column; justify-content:space-between; flex:1;">
 
           <div class="anim-in" style="transition-delay:0.1s; display:flex; gap:10px; padding:8px 12px; background:var(--surface); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:8px; align-items:flex-start;">
             <div style="font-family:var(--mono); font-size:10px; color:var(--accent); font-weight:700; flex-shrink:0; margin-top:2px; min-width:18px;">01</div>
